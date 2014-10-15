@@ -4,7 +4,19 @@ import sys
 import re
 import codecs
 
-def processFile(filepath):
+
+def parse_meta(key, content):
+    pattern = re.compile('<META NAME="{0}" CONTENT="(.*?)">'.format(key))
+    res = pattern.findall(content)
+
+    if res:
+        res = filter(lambda x: len(x), res)
+        return ", ".join(res)
+    else:
+        return None
+
+
+def process_file(filepath):
     fp = codecs.open(filepath, 'rU', 'iso-8859-2')
 
     content = fp.read()
@@ -15,9 +27,9 @@ def processFile(filepath):
 
     fp.close()
     print("nazwa pliku:", filepath)
-    print("autor:")
-    print("dzial:")
-    print("slowa kluczowe:")
+    print("autor:", parse_meta('AUTOR', content))
+    print("dzial:", parse_meta('DZIAL', content))
+    print("slowa kluczowe:", parse_meta('KLUCZOWE_\d+', content))
     print("liczba zdan:")
     print("liczba skrotow:")
     print("liczba liczb calkowitych z zakresu int:")
@@ -40,4 +52,4 @@ if __name__ == '__main__':
         for f in files:
             if f.endswith(".html"):
                 filepath = os.path.join(root, f)
-                processFile(filepath)
+                process_file(filepath)

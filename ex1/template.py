@@ -26,22 +26,18 @@ def processFile(filepath):
     print("liczba adresow email:")
     print("\n")
 
+if __name__ == '__main__':
 
+    try:
+        path = sys.argv[1]
+    except IndexError:
+        print("Brak podanej nazwy katalogu")
+        sys.exit(0)
 
-try:
-    path = sys.argv[1]
-except IndexError:
-    print("Brak podanej nazwy katalogu")
-    sys.exit(0)
+    tree = os.walk(path)
 
-
-tree = os.walk(path)
-
-for root, dirs, files in tree:
-    for f in files:
-        if f.endswith(".html"):
-            filepath = os.path.join(root, f)
-            processFile(filepath)
-
-
-
+    for root, dirs, files in tree:
+        for f in files:
+            if f.endswith(".html"):
+                filepath = os.path.join(root, f)
+                processFile(filepath)

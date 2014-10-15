@@ -6,7 +6,7 @@ import codecs
 
 
 def parse_meta(key, content):
-    pattern = re.compile('<META NAME="{0}" CONTENT="(.*?)">'.format(key))
+    pattern = re.compile(r'<META NAME="{0}" CONTENT="(.*?)">'.format(key))
     res = pattern.findall(content)
 
     if res:
@@ -14,6 +14,20 @@ def parse_meta(key, content):
         return ", ".join(res)
     else:
         return None
+
+
+def parse_ints(content):
+    patterns = [
+        r'3276[0-7]',
+        r'327[0-5]\d',
+        r'32[0-6]\d\d',
+        r'3[0-1]\d\d\d',
+        r'[1-2]\d\d\d\d',
+        r'\d{1,4}',
+    ]
+
+    pattern = r'^((-?({0}))|(-32768))$'.format("|".join(patterns))
+    print(pattern)
 
 
 def process_file(filepath):
@@ -37,6 +51,8 @@ def process_file(filepath):
     print("liczba dat:")
     print("liczba adresow email:")
     print("\n")
+
+    print(parse_ints([]))
 
 if __name__ == '__main__':
 

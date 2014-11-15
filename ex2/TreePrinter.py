@@ -134,24 +134,33 @@ class TreePrinter:
     def printTree(self, depth):
         return self.expression.printTree(depth)
 
-    @addToClass(AST.Const)
+    @addToClass(AST.Integer)
     def printTree(self, depth):
-        return depth + self.const_value + "\n"
+        return depth + str(self.value) + "\n"
+
+    @addToClass(AST.Float)
+    def printTree(self, depth):
+        return depth + str(self.value) + "\n"
+
+    @addToClass(AST.String)
+    def printTree(self, depth):
+        return depth + str(self.value) + "\n"
 
     @addToClass(AST.Expression)
     def printTree(self, depth):
-        result = ""
-        if self.id_or_const:
-            if isinstance(self.id_or_const, str):
-                result += depth + self.id_or_const+"\n"
-            else:
-                result += self.id_or_const.printTree(depth)
-        else:
-            result += depth
-            result += self.typeexpr +"\n"
-            result += self.expression1.printTree(depth + "| ")
-            result += self.expression2.printTree(depth + "| ")
+        result = depth
+        result += self.oper + "\n"
+        result += self.left.printTree(depth + "| ")
+        result += self.right.printTree(depth + "| ")
         return result
+
+    @addToClass(AST.SingleExpression)
+    def printTree(self, depth):
+        if isinstance(self.id, str):
+            return depth + self.id+"\n"
+        else:
+            return self.id.printTree(depth)
+
 
     @addToClass(AST.Funcall)
     def printTree(self, depth):
@@ -162,7 +171,7 @@ class TreePrinter:
         return result
 
 
-    @addToClass(AST.ExprInBrackets)
+    @addToClass(AST.ExprNested)
     def printTree(self, depth):
         return self.expression.printTree(depth)
 

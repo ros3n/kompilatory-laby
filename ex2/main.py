@@ -8,9 +8,8 @@ import AST
 
 #TODO:
 #how to print labeled instructions
-
-#ogarnac nawiasy w expression
-#co się dzieje w experssions
+#tworzę struktury zależne od CParser
+from TypeChecker import TypeChecker
 
 if __name__ == '__main__':
 
@@ -30,3 +29,9 @@ if __name__ == '__main__':
     result = open("result.txt", "w")
     result.write(str(ast))
     result.close()
+
+    for str in ast.accept(TypeChecker()):
+        print str
+
+
+

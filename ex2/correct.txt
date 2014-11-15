@@ -1,0 +1,68 @@
+DECL
+| =
+| | a
+| | 0
+| =
+| | b
+| | 0
+| =
+| | c
+| | 0
+FUNDEF
+| gcd
+| RET int
+| ARG m
+| ARG n
+| DECL
+| | =
+| | | res
+| | | 0
+| IF
+| | !=
+| | | m
+| | | n
+| | IF
+| | | >
+| | | | m
+| | | | n
+| | | =
+| | | | res
+| | | | FUNCALL
+| | | | | gcd
+| | | | | -
+| | | | | | m
+| | | | | | n
+| | | | | n
+| | ELSE
+| | | =
+| | | | res
+| | | | FUNCALL
+| | | | | gcd
+| | | | | -
+| | | | | | n
+| | | | | | m
+| | | | | m
+| ELSE
+| | =
+| | | res
+| | | m
+| PRINT
+| | res
+| RETURN
+| | res
+INSTRUCTIONS
+WHILE
+| >=
+| | a
+| | b
+| =
+| | a
+| | *
+| | | /
+| | | | 1
+| | | | 2
+| | | +
+| | | | a
+| | | | /
+| | | | | b
+| | | | | a

@@ -30,8 +30,8 @@ if __name__ == '__main__':
     result.write(str(ast))
     result.close()
 
-    #for str in ast.accept(TypeChecker()):
-    #    print str
+    for word in ast.accept(TypeChecker()):
+        print word
 
 
 

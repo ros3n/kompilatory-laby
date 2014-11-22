@@ -46,10 +46,7 @@ class Instructions(Node):
     def __init__(self):
         self.instructions = []
 
-class Instruction(Node):
-    def __init__(self, lineno, instruction):
-        self.instruction = instruction
-        self.lineno = lineno
+
 
 class Print_instr(Node):
     def __init__(self, lineno, expression):

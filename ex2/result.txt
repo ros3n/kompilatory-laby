@@ -8,6 +8,15 @@ DECL
 | =
 | | c
 | | 0
+| =
+| | p
+| | "a"
+| =
+| | q
+| | "x"
+| =
+| | val
+| | 3
 FUNDEF
 | gcd
 | RET int
@@ -27,12 +36,7 @@ FUNDEF
 | | | | n
 | | | =
 | | | | res
-| | | | FUNCALL
-| | | | | gcd
-| | | | | -
-| | | | | | m
-| | | | | | n
-| | | | | n
+| | | | 2
 | | ELSE
 | | | =
 | | | | res
@@ -44,8 +48,8 @@ FUNDEF
 | | | | | m
 | ELSE
 | | =
-| | | res
-| | | m
+| | | a
+| | | 2.0
 | PRINT
 | | res
 | RETURN
@@ -66,3 +70,14 @@ WHILE
 | | | | /
 | | | | | b
 | | | | | a
+| =
+| | p
+| | -
+| | | p
+| | | q
+| =
+| | val
+| | FUNCALL
+| | | gcd
+| | | 2
+| | | 2

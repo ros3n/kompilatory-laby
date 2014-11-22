@@ -63,10 +63,6 @@ class TreePrinter:
             result += elem.printTree(depth)
         return result
 
-    @addToClass(AST.Instruction)
-    def printTree(self, depth):
-        result = self.instruction.printTree(depth)
-        return result
 
     @addToClass(AST.Print_instr)
     def printTree(self, depth):

@@ -55,7 +55,6 @@ class Cparser(object):
             p[0] = AST.Declaration(p.lineno(1), p[1])
         else:
             p[0] = AST.Declaration(p.lineno(1), p[1], p[2])
-            print len(p)
 
     def p_inits(self, p):
         """inits : inits ',' init
@@ -100,14 +99,12 @@ class Cparser(object):
                        | break_instr
                        | continue_instr
                        | compound_instr"""
-        print "b"
-        p[0] = AST.Instruction(p.lineno(1), p[1])
+        p[0] = p[1]
 
 
     def p_print_instr(self, p):
         """print_instr : PRINT expression ';'
                        | PRINT error ';' """
-        print "a"
         p[0] = AST.Print_instr(p.lineno(1), p[2])
 
 

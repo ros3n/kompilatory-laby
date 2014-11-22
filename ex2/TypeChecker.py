@@ -74,8 +74,8 @@ class TypeChecker(object):
 
 
     def visit_Program(self, node):
-        node.Functions = FunctionsTable("Functions")
-        node.Variables = SymbolTable("Variables")
+        node.Functions = FunctionsTable("ProgramF")
+        node.Variables = SymbolTable("ProgramV")
 
         node.declarations.Functions = node.Functions
         node.declarations.Variables = node.Variables
@@ -90,50 +90,36 @@ class TypeChecker(object):
         return self.errors
 
     def visit_Declarations(self, node):
-        print "in Decl"
-        if node.declarations:
-            node.declarations.Functions = node.Functions
-            node.declarations.Variables = node.Variables
-            node.declarations.accept(self)
-
-        if node.declaration:
-            node.declaration.Functions = node.Functions
-            node.declaration.Variables = node.Variables
-            node.declaration.accept(self)
+        for elem in node.declarations:
+            elem.Functions = node.Functions
+            elem.Variables = node.Variables
+            elem.accept(self)
 
 
     def visit_Declaration(self, node):
-        print "in Decl"
         node.inits.Functions = node.Functions
         node.inits.Variables = node.Variables
         self.visit_Inits(node.inits, node.type)
 
 
     def visit_Inits(self, node, type):
-        print "in init"
-        node.init.Functions = node.Functions
-        node.init.Variables = node.Variables
-        self.visit_Init(node.init, type)
-        if node.inits:
-            node.inits.Functions = node.Functions
-            node.inits.Variables = node.Variables
-            self.visit_Inits(node.inits, type)
+       for elem in node.inits:
+            elem.Functions = node.Functions
+            elem.Variables = node.Variables
+            self.visit_Init(elem, type)
 
     def visit_Init(self, node, type):
         if node.Variables.put(node.id, type) == -1:
-            self.errors.append("In line " + str(node.lineno) + ": Variable " + node.id + " already initialized")
+            self.errors.append(str(node.lineno) + ": " + node.id + " already initialized")
 
     def visit_Instructions(self, node):
-        if node.instructions:
-            node.instructions.Functions = node.Functions
-            node.instructions.Variables = node.Variables
-            node.instructions.accept(self)
-        node.instruction.Functions = node.Functions
-        node.instruction.Variables = node.Variables
-        node.instruction.accept(self)
+        for elem in node.instructions:
+            elem.Functions = node.Functions
+            elem.Variables = node.Variables
+            elem.accept(self)
+
 
     def visit_Instruction(self, node):
-        print "in instr"
         node.instruction.Functions = node.Functions
         node.instruction.Variables = node.Variables
         node.instruction.accept(self)
@@ -152,14 +138,18 @@ class TypeChecker(object):
         node.expression.Functions = node.Functions
         node.expression.Variables = node.Variables
         #TODO
-        type2 = node.expression.accept(self)
         type1 = node.Variables.get(node.id)
         if type1 == -1:
-            self.errors.append("In line " + str(node.lineno) + ": Variable " + node.id + " was not declared")
-        elif type2 == -1:
-            self.errors.append("In line " + str(node.lineno) + ": Incorrect expression")
-        elif type1 != type2:
-            self.errors.append("In line " + str(node.lineno) + ": Can't assign " + str(type2) + " to " + str(type1))
+            self.errors.append(str(node.lineno) + ": " + node.id + " undeclared")
+            return
+
+        type2 = node.expression.accept(self)
+        if type2 == -1:
+            self.errors.append(str(node.lineno) + ": wrong expression")
+            return
+
+        if type1 != type2:
+            self.errors.append(str(node.lineno) + ": Type mismatch: " + str(type2) + " and " + str(type1))
 
     def visit_Choice_instr(self, node):
         node.condition.Functions = node.Functions
@@ -223,9 +213,8 @@ class TypeChecker(object):
                 self.ttype[node.oper][type1].keys():
             return self.ttype[node.oper][type1][type2]
         else:
-            print str(type1) + node.oper + str(type2)
-            self.errors.append("In line " + str(node.lineno) + ": Invalid expression")
-            return 'int'
+            self.errors.append(str(node.right.lineno) + ": Invalid expression")
+            return type1
 
     def visit_ExprNested(self, node):
         node.expression.Functions = node.Functions
@@ -238,8 +227,8 @@ class TypeChecker(object):
             node.id.Variables = node.Variables
             return node.id.accept(self)
         if node.Variables.get(node.id)== -1:
-           self.errors.append(" In line "+ str(node.lineno) + ": Couldn't find the variable" +node.id+ " in a current scope")
-           return 'int'
+           self.errors.append(str(node.lineno) + ": Couldn't find the variable" + node.id)
+           return node.type
         return node.Variables.get(node.id)
 
     def visit_Integer(self, node):
@@ -257,39 +246,25 @@ class TypeChecker(object):
         node.expr_list_or_empty.Variables = node.Variables
         type2 = node.expr_list_or_empty.accept(self)
         if type1[0] != type2:
-            self.errors.append("In line " + str(node.lineno) + ": Function call arguments don't match the definition")
+            self.errors.append(str(node.lineno) + ": Function args mismatch")
         return type1[1]
 
 
     def visit_Expr_list_or_empty(self, node):
-        node.expr_list.Functions = node.Functions
-        node.expr_list.Variables = node.Variables
-        if node.expr_list != None:
-            return node.expr_list.accept(self)
-        else:
-            return None
+        l = []
+        for elem in node.expr_list:
+            elem.Functions = node.Functions
+            elem.Variables = node.Variables
+            l.append(elem.accept(self))
+        return l
 
-    def visit_Expr_list(self, node):
-        l1 = []
-        if node.expr_list != None:
-            node.expr_list.Functions = node.Functions
-            node.expr_list.Variables = node.Variables
-            l1.extend(node.expr_list.accept(self))
-        node.expression.Functions = node.Functions
-        node.expression.Variables = node.Variables
-        l1.append(node.expression.accept(self))
-        return l1
+
 
     def visit_Fundefs(self, node):
-        if node.fundef != None:
-            node.fundef.Functions = node.Functions
-            node.fundef.Variables = node.Variables
-            node.fundef.accept(self)
-
-        if node.fundefs != None:
-            node.fundefs.Functions = node.Functions
-            node.fundefs.Variables = node.Variables
-            node.fundefs.accept(self)
+        for elem in node.fundefs:
+            elem.Functions = node.Functions
+            elem.Variables = node.Variables
+            elem.accept(self)
 
     def visit_Fundef(self, node):
         node.Functions.putNewFun(node.id, node.type)
@@ -308,23 +283,13 @@ class TypeChecker(object):
         node.compound_instr.Variables = Variables
         node.compound_instr.accept(self)
 
-    def visit_Args_list_or_empty(self, node):
-        node.args_list.Functions = node.Functions
-        node.args_list.Variables = node.Variables
-        if node.args_list != None:
-            return node.args_list.accept(self)
-        else:
-            return None
 
     def visit_Args_list(self, node):
         l1 = []
-        if node.args_list != None:
-            node.args_list.Functions = node.Functions
-            node.args_list.Variables = node.Variables
-            l1.extend(node.args_list.accept(self))
-        node.arg.Functions = node.Functions
-        node.arg.Variables = node.Variables
-        l1.append(node.arg.accept(self))
+        for elem in node.args_list:
+            elem.Functions = node.Functions
+            elem.Variables = node.Variables
+            l1.append(elem.accept(self))
         return l1
 
     def visit_Arg(self, node):

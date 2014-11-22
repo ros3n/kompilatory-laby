@@ -29,24 +29,22 @@ class TreePrinter:
     @addToClass(AST.Declarations)
     def printTree(self, depth):
         result = ""
-        if self.declarations:
-            result += self.declarations.printTree(depth)
-        if self.declaration:
-            result += self.declaration.printTree(depth)
+        for elem in self.declarations:
+            result += elem.printTree(depth)
         return result
 
     @addToClass(AST.Declaration)
     def printTree(self, depth):
-        result = self.inits.printTree(depth)
+        result = ""
+        if self.inits:
+            result += self.inits.printTree(depth)
         return result
 
     @addToClass(AST.Inits)
     def printTree(self, depth):
         result = ""
-        if self.inits:
-            result += self.inits.printTree(depth)
-        if self.init:
-            result += self.init.printTree(depth + "| ")
+        for elem in self.inits:
+            result += elem.printTree(depth + "| ")
         return result
 
     @addToClass(AST.Init)
@@ -61,9 +59,8 @@ class TreePrinter:
     @addToClass(AST.Instructions)
     def printTree(self, depth):
         result = ""
-        if self.instructions:
-            result += self.instructions.printTree(depth)
-        result += self.instruction.printTree(depth)
+        for elem in self.instructions:
+            result += elem.printTree(depth)
         return result
 
     @addToClass(AST.Instruction)
@@ -179,25 +176,16 @@ class TreePrinter:
     @addToClass(AST.Expr_list_or_empty)
     def printTree(self, depth):
         result = ""
-        if self.expr_list:
-            result += self.expr_list.printTree(depth)
+        for elem in self.expr_list:
+            result += elem.printTree(depth)
         return result
 
-    @addToClass(AST.Expr_list)
-    def printTree(self, depth):
-        result = ""
-        if self.expr_list:
-            result += self.expr_list.printTree(depth)
-        result += self.expression.printTree(depth)
-        return result
 
     @addToClass(AST.Fundefs)
     def printTree(self, depth):
         result = ""
-        if self.fundef:
-            result += self.fundef.printTree(depth)
-        if self.fundefs:
-            result += self.fundefs.printTree(depth)
+        for elem in self.fundefs:
+            result += elem.printTree(depth)
         return result
 
     @addToClass(AST.Fundef)
@@ -207,19 +195,12 @@ class TreePrinter:
         result += self.compound_instr.printTree(depth + "| ")
         return result
 
-    @addToClass(AST.Args_list_or_empty)
-    def printTree(self, depth):
-        result = ""
-        if self.args_list:
-            result += self.args_list.printTree(depth)
-        return result
 
     @addToClass(AST.Args_list)
     def printTree(self, depth):
         result = ""
-        if self.args_list:
-            result += self.args_list.printTree(depth)
-        result += self.arg.printTree(depth)
+        for elem in self.args_list:
+            result += elem.printTree(depth)
         return result
 
     @addToClass(AST.Arg)

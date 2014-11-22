@@ -15,17 +15,15 @@ class Node(object):
 
 class Program(Node):
     def __init__(self, lineno, declarations, fundefs, instructions):
+        self.lineno = lineno
         self.declarations = declarations
         self.fundefs = fundefs
         self.instructions = instructions
-        self.lineno = lineno
 
 
 class Declarations(Node):
-    def __init__(self, lineno, declarations=None, declaration=None):
-        self.declarations = declarations
-        self.declaration = declaration
-        self.lineno = lineno
+    def __init__(self):
+        self.declarations = []
 
 class Declaration(Node):
     def __init__(self, lineno, type, inits=None):
@@ -35,11 +33,8 @@ class Declaration(Node):
 
 
 class Inits(Node):
-    def __init__(self, lineno, init, inits=None):
-        self.init = init
-        self.inits = inits
-        self.lineno = lineno
-
+    def __init__(self):
+        self.inits = []
 
 class Init(Node):
     def __init__(self, lineno, id, expression):
@@ -48,10 +43,8 @@ class Init(Node):
         self.lineno = lineno
 
 class Instructions(Node):
-    def __init__(self, lineno, instruction, instructions=None):
-        self.instructions = instructions
-        self.instruction = instruction
-        self.lineno = lineno
+    def __init__(self):
+        self.instructions = []
 
 class Instruction(Node):
     def __init__(self, lineno, instruction):
@@ -159,20 +152,14 @@ class ExprNested(Node):
         self.lineno = lineno
 
 class Expr_list_or_empty(Node):
-    def __init__(self, lineno, expr_list = None):
-        self.expr_list = expr_list
+    def __init__(self, lineno):
+        self.expr_list = []
         self.lineno = lineno
 
-class Expr_list(Node):
-    def __init__(self, lineno, expression, expr_list=None):
-        self.expr_list = expr_list
-        self.expression = expression
-        self.lineno = lineno
 
 class Fundefs(Node):
-    def __init__(self, lineno, fundef = None, fundefs = None):
-        self.fundef = fundef
-        self.fundefs = fundefs
+    def __init__(self, lineno):
+        self.fundefs = []
         self.lineno = lineno
 
 
@@ -184,15 +171,9 @@ class Fundef(Node):
         self.compound_instr = compound_instruction
         self.lineno = lineno
 
-class Args_list_or_empty(Node):
-    def __init__(self, lineno, args_list = None):
-        self.args_list = args_list
-        self.lineno = lineno
-
 class Args_list(Node):
-    def __init__(self, lineno, arg, args_list = None):
-        self.args_list = args_list
-        self.arg = arg
+    def __init__(self, lineno):
+        self.args_list = []
         self.lineno = lineno
 
 class Arg(Node):

@@ -4,6 +4,7 @@ import ply.yacc as yacc
 from Cparser import Cparser
 import TreePrinter
 import AST
+from Interpreter import Interpreter
 
 
 #TODO:
@@ -32,6 +33,8 @@ if __name__ == '__main__':
 
     for word in ast.accept(TypeChecker()):
         print word
+
+    ast.accept2(Interpreter())
 
 
 

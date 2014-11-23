@@ -1,7 +1,7 @@
 DECL
 | =
 | | a
-| | 3.2
+| | 5.1
 | =
 | | b
 | | 2.1
@@ -17,47 +17,6 @@ DECL
 FUNDEF
 | gcd
 | RET int
-| ARG m
-| ARG n
-| DECL
-| | =
-| | | res
-| | | 0
-| IF
-| | !=
-| | | m
-| | | n
-| | IF
-| | | >
-| | | | m
-| | | | n
-| | | =
-| | | | res
-| | | | FUNCALL
-| | | | | gcd
-| | | | | -
-| | | | | | m
-| | | | | | n
-| | | | | n
-| | ELSE
-| | | =
-| | | | res
-| | | | FUNCALL
-| | | | | gcd
-| | | | | -
-| | | | | | n
-| | | | | | m
-| | | | | m
-| ELSE
-| | =
-| | | res
-| | | m
-| PRINT
-| | res
-| RETURN
-| | res
-| dup
-| RET float
 | ARG m
 | ARG n
 | DECL
@@ -129,11 +88,3 @@ WHILE
 | | | | /
 | | | | | b
 | | | | | a
-REPEAT
-| =
-| | a
-| | +
-| | | a
-| | | b
-| UNTIL
-| a

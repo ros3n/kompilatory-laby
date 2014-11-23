@@ -159,7 +159,7 @@ class Cparser(object):
 
     def p_condition(self, p):
         """condition : expression"""
-        p[0] = AST.Condition(p.lineno(1), p[1])
+        p[0] = p[1]
 
 
     def p_const(self, p):

@@ -123,9 +123,6 @@ class TreePrinter:
         result += self.instructions.printTree(depth)
         return result
 
-    @addToClass(AST.Condition)
-    def printTree(self, depth):
-        return self.expression.printTree(depth)
 
     @addToClass(AST.Integer)
     def printTree(self, depth):

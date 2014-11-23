@@ -11,6 +11,9 @@ class Node(object):
             return fun(self)
         print "Lack of some visit_function: " + self.__class__.__name__
 
+    def accept2(self, visitor):
+        return visitor.visit(self)
+
 
 
 class Program(Node):
@@ -103,11 +106,6 @@ class Compound_instr(Node):
     def __init__(self, lineno, declarations, instructions):
         self.declarations = declarations
         self.instructions = instructions
-        self.lineno = lineno
-
-class Condition(Node):
-    def __init__(self, lineno, expression):
-        self.expression = expression
         self.lineno = lineno
 
 class Integer(Node):

@@ -25,7 +25,7 @@ class Interpreter(object):
         node.fundefs.accept2(self)
         print self.memoryStack.stack[0].data
         node.instructions.accept2(self)
-        print self.memoryStack.stack[0].data
+        print self.memoryStack.stack[0].data, self.memoryStack.stack[0].name, "len: ", len(self.memoryStack.stack)
 
 
     @when(AST.Declarations)
@@ -62,7 +62,6 @@ class Interpreter(object):
 
     @when(AST.Expression)
     def visit(self, node):
-        print node.oper, node.left.accept2(self), node.right.accept2(self)
         if node.oper == '*':
             return node.left.accept2(self) * node.right.accept2(self)
         if node.oper == '/':
@@ -100,7 +99,7 @@ class Interpreter(object):
 
     @when(AST.Assignment)
     def visit(self, node):
-        self.memoryStack.insert(node.id, node.expression.accept2(self))
+        self.memoryStack.set(node.id, node.expression.accept2(self))
 
     @when(AST.Choice_instr)
     def visit(self, node):

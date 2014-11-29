@@ -1,4 +1,7 @@
 float a = 6, b = 5, c = 0;
+int x = 0;
+
+string f = "test";
 
 int gcd(int m, int n) {
 
@@ -16,10 +19,13 @@ return res;
 }
 
 while(a >= b ) {
-    a = 1./2*(a+b/a);
+    a = 1/2*(a+b/a);
     print a;
 }
 
-a = gcd(20, 12);
-print a;
+x = gcd(20, 12);
+print x;
+
+print f*5;
+
 

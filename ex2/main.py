@@ -31,10 +31,14 @@ if __name__ == '__main__':
     result.write(str(ast))
     result.close()
 
-    for word in ast.accept(TypeChecker()):
+    tpc = ast.accept(TypeChecker())
+
+    for word in tpc:
         print word
 
-    ast.accept2(Interpreter())
+    if not tpc:
+        ast.accept2(Interpreter())
+
 
 
 

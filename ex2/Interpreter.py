@@ -1,4 +1,3 @@
-
 import AST
 import SymbolTable
 from Memory import *
@@ -23,9 +22,7 @@ class Interpreter(object):
         self.memoryStack = MemoryStack(Memory("global"))
         node.declarations.accept2(self)
         node.fundefs.accept2(self)
-        print self.memoryStack.stack[0].data
         node.instructions.accept2(self)
-        print self.memoryStack.stack[0].data, self.memoryStack.stack[0].name, "len: ", len(self.memoryStack.stack)
 
 
     @when(AST.Declarations)
@@ -65,7 +62,7 @@ class Interpreter(object):
         if node.oper == '*':
             return node.left.accept2(self) * node.right.accept2(self)
         if node.oper == '/':
-            return node.left.accept2(self) / node.right.accept2(self)
+            return float(node.left.accept2(self)) / float(node.right.accept2(self))
         if node.oper == '+':
             return node.left.accept2(self) + node.right.accept2(self)
         if node.oper == '-':

@@ -11,14 +11,14 @@ def tables(parent):
 class TypeChecker(object):
     ttype = {
         '+': {
-            'str': {'str': 'str'},
+            'string': {'string': 'string'},
             'int': {'float': 'float', 'int': 'int'},
             'float': {'float': 'float', 'int': 'float'}},
         '-': {
             'int': {'int': 'int', 'float': 'float'},
             'float': {'float': 'float', 'int': 'float'}},
         '*': {
-            'str': {'int': 'str'},
+            'string': {'int': 'string'},
             'int': {'int': 'int', 'float': 'float'},
             'float': {'int': 'float', 'float': 'float'}},
         '/': {
@@ -188,6 +188,7 @@ class TypeChecker(object):
             return self.ttype[node.oper][type1][type2]
         else:
             self.errors.append(str(node.right.lineno) + ": Invalid expression")
+            print node.oper, type1, type2
             return type1
 
     def visit_ExprNested(self, node):
@@ -210,7 +211,7 @@ class TypeChecker(object):
         return "float"
 
     def visit_String(self, node):
-        return "str"
+        return "string"
 
     def visit_Funcall(self, node):
         type1 = node.Tables[0].get(node.id)

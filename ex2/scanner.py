@@ -73,7 +73,7 @@ class Scanner(object):
 
     def t_STRING(self, t):
         r'\"([^\\\n]|(\\.))*?\"'
-        t.value = str(t.value)
+        t.value = str(t.value[1:-1])
         return t
 
 

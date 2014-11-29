@@ -8,6 +8,12 @@ DECL
 | =
 | | c
 | | 0
+| =
+| | x
+| | 0
+| =
+| | f
+| | test
 FUNDEF
 | gcd
 | RET int
@@ -57,7 +63,7 @@ WHILE
 | | a
 | | *
 | | | /
-| | | | 1.0
+| | | | 1
 | | | | 2
 | | | +
 | | | | a
@@ -67,10 +73,14 @@ WHILE
 | PRINT
 | | a
 =
-| a
+| x
 | FUNCALL
 | | gcd
 | | 20
 | | 12
 PRINT
-| a
+| x
+PRINT
+| *
+| | f
+| | 5

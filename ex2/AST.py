@@ -82,8 +82,8 @@ class While_instr(Node):
         self.lineno = lineno
 
 class Repeat_instr(Node):
-    def __init__(self, lineno, instructions, condition):
-        self.instructions = instructions
+    def __init__(self, lineno, instruction, condition):
+        self.instruction = instruction
         self.condition = condition
         self.lineno = lineno
 
@@ -123,7 +123,7 @@ class String(Node):
         self.value = value
         self.lineno = lineno
 
-class SingleExpression(Node):
+class Variable(Node):
     def __init__(self, lineno, id):
         self.id = id
         self.lineno = lineno
@@ -141,12 +141,7 @@ class Funcall(Node):
         self.expr_list_or_empty = expr_list_or_empty
         self.lineno = lineno
 
-class ExprNested(Node):
-    def __init__(self, lineno, expression):
-        self.expression = expression
-        self.lineno = lineno
-
-class Expr_list_or_empty(Node):
+class Expressions(Node):
     def __init__(self, lineno):
         self.expr_list = []
         self.lineno = lineno

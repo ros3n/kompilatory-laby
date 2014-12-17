@@ -36,6 +36,9 @@ class FunctionsTable(object):
     err = -1
     ok = 0
 
+    def dicttype(self):
+        return self.dicttype
+
     def putNewFun(self, name, type):
         if name in self.dict.keys():
             self.dict[name] = []

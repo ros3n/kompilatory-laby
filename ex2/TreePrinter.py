@@ -23,7 +23,7 @@ class TreePrinter:
         result += "FUNDEF\n"
         result += self.fundefs.printTree("")
         result += "INSTRUCTIONS\n"
-        result += self.instructions.printTree("")
+        result += self.instructions.printTree("| ")
         return result
 
     @addToClass(AST.Declarations)
@@ -95,7 +95,7 @@ class TreePrinter:
     @addToClass(AST.Repeat_instr)
     def printTree(self, depth):
         result = depth + "REPEAT\n"
-        result += self.instructions.printTree(depth + "| ")
+        result += self.instruction.printTree(depth + "| ")
         result += depth + "| "
         result += "UNTIL\n"
         result += self.condition.printTree(depth + "| ")
@@ -144,7 +144,7 @@ class TreePrinter:
         result += self.right.printTree(depth + "| ")
         return result
 
-    @addToClass(AST.SingleExpression)
+    @addToClass(AST.Variable)
     def printTree(self, depth):
         if isinstance(self.id, str):
             return depth + self.id+"\n"
@@ -161,12 +161,7 @@ class TreePrinter:
         return result
 
 
-    @addToClass(AST.ExprNested)
-    def printTree(self, depth):
-        return self.expression.printTree(depth)
-
-
-    @addToClass(AST.Expr_list_or_empty)
+    @addToClass(AST.Expressions)
     def printTree(self, depth):
         result = ""
         for elem in self.expr_list:

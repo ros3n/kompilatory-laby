@@ -39,7 +39,7 @@ class Interpreter(object):
     def visit(self, node):
         self.memoryStack.insert(node.id, node.expression.accept2(self))
 
-    @when(AST.SingleExpression)
+    @when(AST.Variable)
     def visit(self, node):
         if isinstance(node.id, str):
             return self.memoryStack.get(node.id)
@@ -59,10 +59,12 @@ class Interpreter(object):
 
     @when(AST.Expression)
     def visit(self, node):
+        if node.oper == '%':
+            return node.left.accept2(self) % node.right.accept2(self)
         if node.oper == '*':
             return node.left.accept2(self) * node.right.accept2(self)
         if node.oper == '/':
-            return float(node.left.accept2(self)) / float(node.right.accept2(self))
+            return node.left.accept2(self) / node.right.accept2(self)
         if node.oper == '+':
             return node.left.accept2(self) + node.right.accept2(self)
         if node.oper == '-':
@@ -81,10 +83,6 @@ class Interpreter(object):
             return node.left.accept2(self) > node.right.accept2(self)
 
 
-    @when(AST.ExprNested)
-    def visit(self, node):
-        return node.expression.accept2(self)
-
     @when(AST.Instructions)
     def visit(self, node):
         for ins in node.instructions:
@@ -102,12 +100,7 @@ class Interpreter(object):
     def visit(self, node):
         if node.elseinstruction:
             if node.condition.accept2(self):
-                try:
-                    node.instruction.accept2(self)
-                except ContinueException:
-                    pass
-                except BreakException:
-                    pass
+                node.instruction.accept2(self)
             else:
                 node.elseinstruction.accept2(self)
         else:
@@ -127,8 +120,15 @@ class Interpreter(object):
 
     @when(AST.Repeat_instr)
     def visit(self, node):
-        pass
-        #TODO
+        while True:
+            try:
+                node.instruction.accept2(self)
+            except ContinueException:
+                continue
+            except BreakException:
+                break
+            if node.condition.accept2(self):
+                break
 
     @when(AST.Return_instr)
     def visit(self, node):
@@ -170,7 +170,7 @@ class Interpreter(object):
     def visit(self, node):
         return node.id
 
-    @when(AST.Expr_list_or_empty)
+    @when(AST.Expressions)
     def visit(self, node):
         l = []
         for el in node.expr_list:
@@ -179,7 +179,7 @@ class Interpreter(object):
 
     @when(AST.Funcall)
     def visit(self, node):
-        result = None
+        result = 0
         vals = node.expr_list_or_empty.accept2(self)
         fun = self.functions[node.id]
         self.memoryStack.push(Memory("FunHeaderStack"))

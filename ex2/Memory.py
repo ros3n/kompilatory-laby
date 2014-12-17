@@ -2,7 +2,6 @@ class Memory:
 
 
     def __init__(self, name): # memory name
-        self.name = name
         self.data = {}
 
     def has_key(self, name):  # variable name
@@ -28,6 +27,7 @@ class MemoryStack:
         for mem in reversed(self.stack):
             if mem.has_key(name):
                 return mem.get(name)
+        print "Memory.get not found"
         return self.err
 
     def insert(self, name, value): # inserts into memory stack variable <name> with value <value>
@@ -37,6 +37,7 @@ class MemoryStack:
         for mem in reversed(self.stack):
             if mem.has_key(name):
                 mem.put(name, value)
+                return
 
     def push(self, memory): # push memory <memory> onto the stack
         self.stack.append(memory)

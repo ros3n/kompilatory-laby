@@ -119,9 +119,9 @@ class Cparser(object):
 
 
     def p_choice_instr(self, p):
-        """choice_instr : IF '(' condition ')' instruction  %prec IFX
+        """choice_instr : IF '(' condition ')' instruction %prec IFX
                         | IF '(' condition ')' instruction ELSE instruction
-                        | IF '(' error ')' instruction  %prec IFX
+                        | IF '(' error ')' instruction %prec IFX
                         | IF '(' error ')' instruction ELSE instruction """
         if len(p) == 8:
             p[0] = AST.Choice_instr(p.lineno(1), p[3], p[5], p[7])
@@ -201,22 +201,25 @@ class Cparser(object):
                       | ID '(' expr_list_or_empty ')'
                       | ID '(' error ')' """
         if len(p) == 2:
-            p[0] = AST.SingleExpression(p.lineno(1), p[1])
+            if isinstance(p[1], str):
+                p[0] = AST.Variable(p.lineno(1), p[1])
+            else:
+                p[0] = AST.Variable(p[1].lineno, p[1])
             return
         if p[1] == '(' and p[3] == ')':
-            p[0] = AST.ExprNested(p.lineno(1), p[2])
+            p[0] = p[2]
             return
         if p[2] == '(' and p[4] == ')':
             p[0] = AST.Funcall(p.lineno(1), p[1], p[3])
             return
-        p[0] = AST.Expression(p.lineno(1), p[1], p[2], p[3])
+        p[0] = AST.Expression(p[1].lineno, p[1], p[2], p[3])
 
 
     def p_expr_list_or_empty(self, p):
         """expr_list_or_empty : expr_list
                               | """
         if len(p) == 1:
-            p[0] = AST.Expr_list_or_empty(p.lineno(1))
+            p[0] = AST.Expressions(0)
         else:
             p[0] = p[1]
 
@@ -227,7 +230,7 @@ class Cparser(object):
             p[1].expr_list.append(p[3])
             p[0] = p[1]
         else:
-            x = AST.Expr_list_or_empty(p.lineno(1))
+            x = AST.Expressions(p.lineno(1))
             x.expr_list.append(p[1])
             p[0] = x
 
@@ -250,7 +253,7 @@ class Cparser(object):
         """args_list_or_empty : args_list
                               | """
         if len(p) == 1:
-            p[0] = AST.Args_list(p.lineno(1))
+            p[0] = AST.Args_list(0)
         else:
             p[0] = p[1]
 
